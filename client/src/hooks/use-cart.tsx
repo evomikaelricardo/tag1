@@ -1,16 +1,23 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { type Product } from '@shared/schema';
 
+export interface CustomizationData {
+  nameOnTag: string;
+  emergencyPhone: string;
+  contactType: 'phone_call' | 'whatsapp_call' | 'emergency_url';
+}
+
 export interface CartItem {
   product: Product;
   quantity: number;
+  customization: CustomizationData;
 }
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (product: Product, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  addItemWithCustomization: (product: Product, customization: CustomizationData, quantity?: number) => void;
+  removeItem: (productId: string, customizationHash: string) => void;
+  updateQuantity: (productId: string, customizationHash: string, quantity: number) => void;
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
@@ -41,32 +48,47 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('cart', JSON.stringify(items));
   }, [items]);
 
-  const addItem = (product: Product, quantity = 1) => {
+  // Helper function to create a hash from customization data
+  const getCustomizationHash = (customization: CustomizationData) => {
+    return btoa(JSON.stringify(customization));
+  };
+
+  const addItemWithCustomization = (product: Product, customization: CustomizationData, quantity = 1) => {
     setItems(prev => {
-      const existingItem = prev.find(item => item.product.id === product.id);
+      const customizationHash = getCustomizationHash(customization);
+      const existingItem = prev.find(item => 
+        item.product.id === product.id && 
+        getCustomizationHash(item.customization) === customizationHash
+      );
+      
       if (existingItem) {
         return prev.map(item =>
-          item.product.id === product.id
+          item.product.id === product.id && 
+          getCustomizationHash(item.customization) === customizationHash
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prev, { product, quantity }];
+      return [...prev, { product, quantity, customization }];
     });
   };
 
-  const removeItem = (productId: string) => {
-    setItems(prev => prev.filter(item => item.product.id !== productId));
+  const removeItem = (productId: string, customizationHash: string) => {
+    setItems(prev => prev.filter(item => 
+      !(item.product.id === productId && 
+        getCustomizationHash(item.customization) === customizationHash)
+    ));
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, customizationHash: string, quantity: number) => {
     if (quantity <= 0) {
-      removeItem(productId);
+      removeItem(productId, customizationHash);
       return;
     }
     setItems(prev =>
       prev.map(item =>
-        item.product.id === productId
+        item.product.id === productId &&
+        getCustomizationHash(item.customization) === customizationHash
           ? { ...item, quantity }
           : item
       )
@@ -87,7 +109,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const value: CartContextType = {
     items,
-    addItem,
+    addItemWithCustomization,
     removeItem,
     updateQuantity,
     clearCart,
