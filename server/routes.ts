@@ -60,8 +60,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create payment intent
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(amount * 100), // Convert to cents
-        currency: "usd",
+        amount: Math.round(amount), // IDR doesn't use cents
+        currency: "idr",
         metadata: {
           orderId: order.id,
         },

@@ -5,6 +5,7 @@ import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
 import { type Product } from '@shared/schema';
 import { Link } from 'wouter';
+import { formatIDR } from '@/lib/currency';
 
 interface ProductCardProps {
   product: Product;
@@ -47,7 +48,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </p>
           <div className="flex items-center justify-between">
             <span className="text-2xl font-bold text-primary" data-testid={`text-product-price-${product.id}`}>
-              ${product.price}
+              {formatIDR(product.price)}
             </span>
             <Button
               onClick={handleAddToCart}
