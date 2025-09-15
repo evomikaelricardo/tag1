@@ -1,12 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { useRoute } from 'wouter';
+import { useRoute, useLocation } from 'wouter';
 import { ArrowLeft, Plus, Minus, Shield, Droplets, Smartphone, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useCart } from '@/hooks/use-cart';
-import { useToast } from '@/hooks/use-toast';
 import { type Product } from '@shared/schema';
 import Header from '@/components/header';
 import CartSidebar from '@/components/cart-sidebar';
@@ -16,23 +14,18 @@ import { useState } from 'react';
 
 export default function ProductPage() {
   const [, params] = useRoute('/product/:id');
+  const [, setLocation] = useLocation();
   const productId = params?.id;
   const [quantity, setQuantity] = useState(1);
-  const { addItem } = useCart();
-  const { toast } = useToast();
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ['/api/products', productId],
     enabled: !!productId,
   });
 
-  const handleAddToCart = () => {
+  const handleCustomize = () => {
     if (product) {
-      addItem(product, quantity);
-      toast({
-        title: "Added to cart",
-        description: `${quantity} ${product.name} added to your cart.`,
-      });
+      setLocation(`/customize/${product.id}`);
     }
   };
 
@@ -206,12 +199,12 @@ export default function ProductPage() {
                 </div>
 
                 <Button
-                  onClick={handleAddToCart}
+                  onClick={handleCustomize}
                   className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                   size="lg"
-                  data-testid="button-add-to-cart"
+                  data-testid="button-customize"
                 >
-                  Add to Cart - ${(parseFloat(product.price) * quantity).toFixed(2)}
+                  Customize & Add to Cart - ${(parseFloat(product.price) * quantity).toFixed(2)}
                 </Button>
               </div>
 

@@ -9,6 +9,11 @@ export default function CartSidebar() {
   const { items, isOpen, setIsOpen, updateQuantity, removeItem, getTotalPrice } = useCart();
   const [, setLocation] = useLocation();
 
+  // Helper function to create a hash from customization data
+  const getCustomizationHash = (customization: any) => {
+    return btoa(JSON.stringify(customization));
+  };
+
   const handleCheckout = () => {
     if (items.length > 0) {
       setIsOpen(false);
@@ -42,50 +47,84 @@ export default function CartSidebar() {
             </div>
           ) : (
             <div className="space-y-4">
-              {items.map((item) => (
-                <div
-                  key={item.product.id}
-                  className="flex items-center space-x-4 p-4 bg-muted/30 rounded-lg"
-                  data-testid={`cart-item-${item.product.id}`}
-                >
-                  <img
-                    src={item.product.imageUrl}
-                    alt={item.product.name}
-                    className="w-16 h-16 object-cover rounded-md"
-                  />
-                  <div className="flex-1">
-                    <h4 className="font-medium" data-testid={`text-cart-item-name-${item.product.id}`}>
-                      {item.product.name}
-                    </h4>
-                    <p className="text-sm text-muted-foreground" data-testid={`text-cart-item-price-${item.product.id}`}>
-                      ${item.product.price} each
-                    </p>
+              {items.map((item, index) => {
+                const customizationHash = getCustomizationHash(item.customization);
+                return (
+                  <div
+                    key={`${item.product.id}-${customizationHash}`}
+                    className="flex flex-col space-y-3 p-4 bg-muted/30 rounded-lg"
+                    data-testid={`cart-item-${item.product.id}-${index}`}
+                  >
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src={item.product.imageUrl}
+                        alt={item.product.name}
+                        className="w-16 h-16 object-cover rounded-md"
+                      />
+                      <div className="flex-1">
+                        <h4 className="font-medium" data-testid={`text-cart-item-name-${item.product.id}-${index}`}>
+                          {item.product.name}
+                        </h4>
+                        <p className="text-sm text-muted-foreground" data-testid={`text-cart-item-price-${item.product.id}-${index}`}>
+                          ${item.product.price} each
+                        </p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => updateQuantity(item.product.id, customizationHash, item.quantity - 1)}
+                          data-testid={`button-decrease-quantity-${item.product.id}-${index}`}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="w-8 text-center" data-testid={`text-quantity-${item.product.id}-${index}`}>
+                          {item.quantity}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => updateQuantity(item.product.id, customizationHash, item.quantity + 1)}
+                          data-testid={`button-increase-quantity-${item.product.id}-${index}`}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {/* Customization details */}
+                    <div className="bg-muted/50 p-3 rounded-md text-sm">
+                      <div className="grid grid-cols-1 gap-2">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Name on tag:</span>
+                          <span className="font-medium">{item.customization.nameOnTag}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Emergency phone:</span>
+                          <span className="font-medium">{item.customization.emergencyPhone}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Contact type:</span>
+                          <span className="font-medium capitalize">
+                            {item.customization.contactType.replace('_', ' ')}
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-2 text-xs"
+                        onClick={() => removeItem(item.product.id, customizationHash)}
+                        data-testid={`button-remove-item-${item.product.id}-${index}`}
+                      >
+                        Remove
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                      data-testid={`button-decrease-quantity-${item.product.id}`}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                    <span className="w-8 text-center" data-testid={`text-quantity-${item.product.id}`}>
-                      {item.quantity}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                      data-testid={`button-increase-quantity-${item.product.id}`}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
