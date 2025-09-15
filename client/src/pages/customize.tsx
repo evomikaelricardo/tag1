@@ -224,7 +224,7 @@ export default function CustomizePage() {
                     <SelectContent>
                       <SelectItem value="phone_call">Phone Call</SelectItem>
                       <SelectItem value="whatsapp_call">WhatsApp Call</SelectItem>
-                      <SelectItem value="emergency_url">URL linked to Emergency Contact Page</SelectItem>
+                      <SelectItem value="emergency_url">Show Emergency Contact Info</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
