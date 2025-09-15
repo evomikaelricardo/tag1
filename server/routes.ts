@@ -1,17 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import Stripe from "stripe";
 import { z } from "zod";
 import { storage } from "./storage";
 import { insertOrderSchema, insertContactSchema } from "@shared/schema";
-
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-12-18.acacia",
-});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all products
@@ -47,53 +38,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create payment intent
-  app.post("/api/create-payment-intent", async (req, res) => {
+  // Create order
+  app.post("/api/create-order", async (req, res) => {
     try {
-      const { amount, orderData } = req.body;
+      const orderData = req.body;
       
       // Validate order data
       const validatedOrder = insertOrderSchema.parse(orderData);
       
       // Create order in storage
       const order = await storage.createOrder(validatedOrder);
-      
-      // Create payment intent
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(amount * 100), // Convert to cents
-        currency: "usd",
-        metadata: {
-          orderId: order.id,
-        },
-      });
 
       res.json({ 
-        clientSecret: paymentIntent.client_secret,
-        orderId: order.id 
+        orderId: order.id,
+        order: order
       });
     } catch (error: any) {
-      console.error("Payment intent creation error:", error);
-      res.status(500).json({ message: "Error creating payment intent: " + error.message });
+      if (error.name === "ZodError") {
+        return res.status(400).json({ message: "Validation error: " + error.message });
+      }
+      console.error("Order creation error:", error);
+      res.status(500).json({ message: "Error creating order: " + error.message });
     }
   });
 
-  // Confirm payment and update order
-  app.post("/api/confirm-payment", async (req, res) => {
+  // Confirm order (for payment methods like cash on delivery, this marks order as confirmed)
+  app.post("/api/confirm-order", async (req, res) => {
     try {
-      const { paymentIntentId, orderId } = req.body;
+      // Validate request body
+      const confirmOrderSchema = z.object({
+        orderId: z.string().uuid("Invalid order ID format")
+      });
       
-      // Retrieve payment intent from Stripe
-      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      const { orderId } = confirmOrderSchema.parse(req.body);
       
-      if (paymentIntent.status === "succeeded") {
-        // Update order status
-        await storage.updateOrderStatus(orderId, "paid", paymentIntentId);
-        res.json({ success: true, message: "Payment confirmed" });
-      } else {
-        res.status(400).json({ success: false, message: "Payment not successful" });
+      // Get the order to check if it exists
+      const order = await storage.getOrder(orderId);
+      if (!order) {
+        return res.status(404).json({ success: false, message: "Order not found" });
       }
+      
+      // Validate payment method is one of the allowed options
+      const allowedMethods = ["cash_on_delivery", "credit_card", "bank_transfer"];
+      if (!allowedMethods.includes(order.paymentMethod)) {
+        return res.status(400).json({ success: false, message: "Invalid payment method" });
+      }
+      
+      // Update order status based on payment method
+      let newStatus = "confirmed";
+      if (order.paymentMethod === "cash_on_delivery") {
+        newStatus = "confirmed";
+      } else if (order.paymentMethod === "credit_card" || order.paymentMethod === "bank_transfer") {
+        newStatus = "awaiting_payment";
+      }
+      
+      await storage.updateOrderStatus(orderId, newStatus);
+      res.json({ success: true, message: "Order confirmed", status: newStatus });
     } catch (error: any) {
-      res.status(500).json({ message: "Error confirming payment: " + error.message });
+      if (error.name === "ZodError") {
+        return res.status(400).json({ message: "Validation error: " + error.message });
+      }
+      res.status(500).json({ message: "Error confirming order: " + error.message });
     }
   });
 

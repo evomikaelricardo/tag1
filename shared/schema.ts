@@ -32,7 +32,7 @@ export const orders = pgTable("orders", {
   }>>().notNull(),
   totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
   status: text("status").notNull().default("pending"),
-  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  paymentMethod: text("payment_method").notNull().default("cash_on_delivery"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -52,6 +52,12 @@ export const insertProductSchema = createInsertSchema(products).omit({
 export const insertOrderSchema = createInsertSchema(orders).omit({
   id: true,
   createdAt: true,
+}).extend({
+  paymentMethod: z.enum(["cash_on_delivery", "credit_card", "bank_transfer"])
+    .default("cash_on_delivery"),
+  totalAmount: z.union([z.string(), z.number()]).transform(val => 
+    typeof val === 'number' ? val.toFixed(2) : val
+  ),
 });
 
 export const insertContactSchema = createInsertSchema(contacts).omit({

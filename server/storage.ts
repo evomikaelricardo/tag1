@@ -10,7 +10,7 @@ export interface IStorage {
   // Orders
   createOrder(order: InsertOrder): Promise<Order>;
   getOrder(id: string): Promise<Order | undefined>;
-  updateOrderStatus(id: string, status: string, stripePaymentIntentId?: string): Promise<Order | undefined>;
+  updateOrderStatus(id: string, status: string): Promise<Order | undefined>;
   
   // Contacts
   createContact(contact: InsertContact): Promise<Contact>;
@@ -97,6 +97,8 @@ export class MemStorage implements IStorage {
     const order: Order = {
       ...insertOrder,
       id,
+      status: insertOrder.status || "pending",
+      paymentMethod: insertOrder.paymentMethod || "cash_on_delivery",
       createdAt: new Date(),
     };
     this.orders.set(id, order);
@@ -107,10 +109,10 @@ export class MemStorage implements IStorage {
     return this.orders.get(id);
   }
 
-  async updateOrderStatus(id: string, status: string, stripePaymentIntentId?: string): Promise<Order | undefined> {
+  async updateOrderStatus(id: string, status: string): Promise<Order | undefined> {
     const order = this.orders.get(id);
     if (order) {
-      const updatedOrder = { ...order, status, stripePaymentIntentId };
+      const updatedOrder = { ...order, status };
       this.orders.set(id, updatedOrder);
       return updatedOrder;
     }
