@@ -204,7 +204,7 @@ export default function ProductPage() {
                   size="lg"
                   data-testid="button-customize"
                 >
-                  Customize & Add to Cart - ${(parseFloat(product.price) * quantity).toFixed(2)}
+                  Buy - ${(parseFloat(product.price) * quantity).toFixed(2)}
                 </Button>
               </div>
 
