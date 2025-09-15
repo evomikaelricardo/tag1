@@ -59,7 +59,7 @@ export class MemStorage implements IStorage {
         description: "Smart travel tags with contact info, destination details, and return instructions for lost luggage. Never lose your bags again with instant contact information.",
         price: "14.99",
         category: "luggage",
-        imageUrl: "https://images.unsplash.com/photo-1565967511849-76a60a516170?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+        imageUrl: "/attached_assets/luggage-safety-tags_1757931776551.png",
         features: ["Secure attachment system", "Travel-ready design", "Contact information storage", "Destination details", "Return instructions"],
         isPopular: 0,
       },
