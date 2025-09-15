@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRoute, useLocation } from 'wouter';
 import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import { Link } from 'wouter';
@@ -20,7 +20,7 @@ export default function CustomizePage() {
   const [, params] = useRoute('/customize/:id');
   const [, setLocation] = useLocation();
   const productId = params?.id;
-  const { addItemWithCustomization } = useCart();
+  const { addItemWithCustomization, setIsOpen } = useCart();
   const { toast } = useToast();
 
   const [customization, setCustomization] = useState<CustomizationData>({
@@ -30,6 +30,15 @@ export default function CustomizePage() {
   });
 
   const [quantity, setQuantity] = useState(1);
+  
+  // Read quantity from URL params and update state
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const quantityParam = urlParams.get('quantity');
+    if (quantityParam && !isNaN(Number(quantityParam)) && Number(quantityParam) > 0) {
+      setQuantity(Number(quantityParam));
+    }
+  }, []);
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ['/api/products', productId],
@@ -67,8 +76,8 @@ export default function CustomizePage() {
       description: `${quantity} ${product.name} with custom details added to your cart.`,
     });
 
-    // Redirect back to the product page or home
-    setLocation('/');
+    // Open cart sidebar to show the added item
+    setIsOpen(true);
   };
 
   const handleInputChange = (field: keyof CustomizationData, value: string) => {

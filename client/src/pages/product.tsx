@@ -25,7 +25,7 @@ export default function ProductPage() {
 
   const handleCustomize = () => {
     if (product) {
-      setLocation(`/customize/${product.id}`);
+      setLocation(`/customize/${product.id}?quantity=${quantity}`);
     }
   };
 

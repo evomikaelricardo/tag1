@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { type Product } from '@shared/schema';
+import { createStableHash } from '@/lib/utils';
 
 export interface CustomizationData {
   nameOnTag: string;
@@ -50,7 +51,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Helper function to create a hash from customization data
   const getCustomizationHash = (customization: CustomizationData) => {
-    return btoa(JSON.stringify(customization));
+    return createStableHash(customization);
   };
 
   const addItemWithCustomization = (product: Product, customization: CustomizationData, quantity = 1) => {

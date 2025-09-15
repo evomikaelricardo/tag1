@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/hooks/use-cart';
 import { Minus, Plus, ShoppingCart, X } from 'lucide-react';
 import { useLocation } from 'wouter';
+import { createStableHash } from '@/lib/utils';
 
 export default function CartSidebar() {
   const { items, isOpen, setIsOpen, updateQuantity, removeItem, getTotalPrice } = useCart();
@@ -11,7 +12,7 @@ export default function CartSidebar() {
 
   // Helper function to create a hash from customization data
   const getCustomizationHash = (customization: any) => {
-    return btoa(JSON.stringify(customization));
+    return createStableHash(customization);
   };
 
   const handleCheckout = () => {
