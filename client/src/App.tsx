@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/hooks/use-cart";
 import Home from "@/pages/home";
 import Product from "@/pages/product";
+import Customize from "@/pages/customize";
 import Checkout from "@/pages/checkout";
 import OrderConfirmation from "@/pages/order-confirmation";
 import NotFound from "@/pages/not-found";
@@ -15,6 +16,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/product/:id" component={Product} />
+      <Route path="/customize/:id" component={Customize} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/order/:id" component={OrderConfirmation} />
       <Route component={NotFound} />

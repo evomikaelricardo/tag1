@@ -1,27 +1,20 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useCart } from '@/hooks/use-cart';
-import { useToast } from '@/hooks/use-toast';
 import { type Product } from '@shared/schema';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCart();
-  const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleCustomize = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem(product);
-    toast({
-      title: "Added to cart",
-      description: `${product.name} has been added to your cart.`,
-    });
+    setLocation(`/customize/${product.id}`);
   };
 
   return (
@@ -50,11 +43,11 @@ export default function ProductCard({ product }: ProductCardProps) {
               ${product.price}
             </span>
             <Button
-              onClick={handleAddToCart}
+              onClick={handleCustomize}
               className="bg-primary text-primary-foreground hover:bg-primary/90"
-              data-testid={`button-add-to-cart-${product.id}`}
+              data-testid={`button-customize-${product.id}`}
             >
-              Add to Cart
+              Customize & Add
             </Button>
           </div>
         </CardContent>
