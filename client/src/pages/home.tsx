@@ -58,7 +58,7 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6" data-testid="text-hero-title">
-              Emergency NFC Tags for <span className="text-yellow-300">Peace of Mind</span>
+              Emergency Tags for <span className="text-yellow-300">Peace of Mind</span>
             </h1>
             <p className="text-lg sm:text-xl text-blue-100 mb-8 max-w-2xl mx-auto" data-testid="text-hero-description">
               Instant access to vital information when it matters most. Our smart NFC tags help first responders and Good Samaritans assist your loved ones quickly and effectively.
