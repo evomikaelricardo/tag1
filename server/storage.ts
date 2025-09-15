@@ -37,7 +37,7 @@ export class MemStorage implements IStorage {
         id: "kids-tag",
         name: "Kids Safety Tags",
         description: "Colorful, fun designs for children with emergency contact info, medical conditions, and parent details. Includes fun stickers and child-friendly designs that kids will want to wear.",
-        price: "375000",
+        price: "24.99",
         category: "kids",
         imageUrl: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
         features: ["Waterproof IP67 rating", "Fun colorful designs", "Easy setup for parents", "Emergency contact storage", "Medical condition alerts"],
@@ -47,7 +47,7 @@ export class MemStorage implements IStorage {
         id: "pet-tag",
         name: "Pet Tags",
         description: "Durable, waterproof tags for pets with owner contact, vet info, medical needs, and GPS location sharing. Perfect for dogs, cats, and other beloved pets.",
-        price: "300000",
+        price: "19.99",
         category: "pets",
         imageUrl: "https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
         features: ["Ultra-durable construction", "Waterproof and weatherproof", "Vet contact information", "Medical needs storage", "GPS location sharing"],
@@ -57,7 +57,7 @@ export class MemStorage implements IStorage {
         id: "luggage-tag",
         name: "Luggage Tags",
         description: "Smart travel tags with contact info, destination details, and return instructions for lost luggage. Never lose your bags again with instant contact information.",
-        price: "225000",
+        price: "14.99",
         category: "luggage",
         imageUrl: "https://images.unsplash.com/photo-1565967511849-76a60a516170?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
         features: ["Secure attachment system", "Travel-ready design", "Contact information storage", "Destination details", "Return instructions"],
@@ -67,7 +67,7 @@ export class MemStorage implements IStorage {
         id: "senior-tag",
         name: "Senior Tags",
         description: "Discreet tags for seniors with medical history, medications, emergency contacts, and care instructions. Designed for dignity and peace of mind.",
-        price: "450000",
+        price: "29.99",
         category: "elderly",
         imageUrl: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
         features: ["Discreet, elegant design", "Complete medical history", "Medication information", "Emergency contacts", "Care instructions"],
@@ -110,7 +110,7 @@ export class MemStorage implements IStorage {
   async updateOrderStatus(id: string, status: string, stripePaymentIntentId?: string): Promise<Order | undefined> {
     const order = this.orders.get(id);
     if (order) {
-      const updatedOrder = { ...order, status, stripePaymentIntentId: stripePaymentIntentId ?? null };
+      const updatedOrder = { ...order, status, stripePaymentIntentId };
       this.orders.set(id, updatedOrder);
       return updatedOrder;
     }

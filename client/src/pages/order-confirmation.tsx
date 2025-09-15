@@ -10,7 +10,6 @@ import { type Order } from '@shared/schema';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Link } from 'wouter';
-import { formatIDR } from '@/lib/currency';
 
 export default function OrderConfirmation() {
   const [, params] = useRoute('/order/:id');
@@ -107,7 +106,7 @@ export default function OrderConfirmation() {
                   <div>
                     <p className="text-muted-foreground">Total</p>
                     <p className="font-medium text-primary" data-testid="text-order-total">
-                      {formatIDR(order.totalAmount)}
+                      ${order.totalAmount}
                     </p>
                   </div>
                 </div>
@@ -137,11 +136,11 @@ export default function OrderConfirmation() {
                       <div>
                         <p className="font-medium">{item.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          Quantity: {item.quantity} × {formatIDR(item.price)}
+                          Quantity: {item.quantity} × ${item.price.toFixed(2)}
                         </p>
                       </div>
                       <p className="font-medium">
-                        {formatIDR(item.price * item.quantity)}
+                        ${(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
                   ))}

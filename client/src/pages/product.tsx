@@ -13,7 +13,6 @@ import CartSidebar from '@/components/cart-sidebar';
 import Footer from '@/components/footer';
 import { Link } from 'wouter';
 import { useState } from 'react';
-import { formatIDR } from '@/lib/currency';
 
 export default function ProductPage() {
   const [, params] = useRoute('/product/:id');
@@ -98,7 +97,7 @@ export default function ProductPage() {
                   {product.name}
                 </h1>
                 <p className="text-3xl font-bold text-primary mb-4" data-testid="text-product-price">
-                  {formatIDR(product.price)}
+                  ${product.price}
                 </p>
                 <p className="text-muted-foreground text-lg" data-testid="text-product-description">
                   {product.description}
@@ -212,7 +211,7 @@ export default function ProductPage() {
                   size="lg"
                   data-testid="button-add-to-cart"
                 >
-                  Add to Cart - {formatIDR(parseFloat(product.price) * quantity)}
+                  Add to Cart - ${(parseFloat(product.price) * quantity).toFixed(2)}
                 </Button>
               </div>
 

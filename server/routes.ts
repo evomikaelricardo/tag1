@@ -10,7 +10,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-08-27.basil",
+  apiVersion: "2024-12-18.acacia",
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -60,8 +60,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create payment intent
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(amount), // IDR doesn't use cents
-        currency: "idr",
+        amount: Math.round(amount * 100), // Convert to cents
+        currency: "usd",
         metadata: {
           orderId: order.id,
         },

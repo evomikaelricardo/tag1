@@ -13,7 +13,6 @@ import { apiRequest } from '@/lib/queryClient';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Link, useLocation } from 'wouter';
-import { formatIDR } from '@/lib/currency';
 
 if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
   throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
@@ -66,7 +65,7 @@ function CheckoutForm() {
         // Confirm payment on backend
         await apiRequest('POST', '/api/confirm-payment', {
           paymentIntentId: paymentIntent.id,
-          orderId: (paymentIntent as any).metadata?.orderId,
+          orderId: paymentIntent.metadata?.orderId,
         });
 
         clearCart();
@@ -75,7 +74,7 @@ function CheckoutForm() {
           description: "Thank you for your purchase!",
         });
         
-        setLocation(`/order/${(paymentIntent as any).metadata?.orderId}`);
+        setLocation(`/order/${paymentIntent.metadata?.orderId}`);
       }
     } catch (error: any) {
       toast({
@@ -105,13 +104,13 @@ function CheckoutForm() {
                 <p className="font-medium">{item.product.name}</p>
                 <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
               </div>
-              <p className="font-medium">{formatIDR(parseFloat(item.product.price) * item.quantity)}</p>
+              <p className="font-medium">${(parseFloat(item.product.price) * item.quantity).toFixed(2)}</p>
             </div>
           ))}
           <Separator />
           <div className="flex justify-between text-lg font-bold">
             <span>Total:</span>
-            <span data-testid="text-order-total">{formatIDR(getTotalPrice())}</span>
+            <span data-testid="text-order-total">${getTotalPrice().toFixed(2)}</span>
           </div>
         </CardContent>
       </Card>
