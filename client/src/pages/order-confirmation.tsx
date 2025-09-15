@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useRoute } from 'wouter';
-import { CheckCircle, Package, Truck, ArrowLeft } from 'lucide-react';
+import { CheckCircle, Package, Truck, ArrowLeft, CreditCard, DollarSign, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -62,16 +62,30 @@ export default function OrderConfirmation() {
                     Order Confirmed!
                   </h1>
                   <p className="text-muted-foreground">
-                    Thank you for your purchase. Your order has been received and is being processed.
+                    {order.paymentMethod === 'cash_on_delivery' 
+                      ? "Thank you for your order. You'll pay when it arrives at your address."
+                      : order.paymentMethod === 'credit_card'
+                      ? "Thank you for your order. Please complete payment to process your order."
+                      : "Thank you for your order. Please complete bank transfer to process your order."
+                    }
                   </p>
                   <div className="flex items-center justify-center space-x-4">
                     <Badge variant="outline" className="text-sm">
                       Order #{order.id.slice(-8).toUpperCase()}
                     </Badge>
                     <Badge 
-                      className={order.status === 'paid' ? 'bg-accent text-accent-foreground' : 'bg-yellow-500 text-white'}
+                      className={
+                        order.status === 'confirmed' ? 'bg-accent text-accent-foreground' : 
+                        order.status === 'awaiting_payment' ? 'bg-yellow-500 text-white' :
+                        order.status === 'paid' ? 'bg-green-500 text-white' :
+                        'bg-gray-500 text-white'
+                      }
                     >
-                      {order.status === 'paid' ? 'Paid' : 'Pending'}
+                      {order.status === 'confirmed' ? 'Confirmed' : 
+                       order.status === 'awaiting_payment' ? 'Awaiting Payment' :
+                       order.status === 'paid' ? 'Paid' :
+                       order.status.charAt(0).toUpperCase() + order.status.slice(1)
+                      }
                     </Badge>
                   </div>
                 </div>
@@ -108,6 +122,20 @@ export default function OrderConfirmation() {
                     <p className="font-medium text-primary" data-testid="text-order-total">
                       ${order.totalAmount}
                     </p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Payment Method</p>
+                    <div className="flex items-center space-x-2">
+                      {order.paymentMethod === 'cash_on_delivery' && <DollarSign className="w-4 h-4" />}
+                      {order.paymentMethod === 'credit_card' && <CreditCard className="w-4 h-4" />}
+                      {order.paymentMethod === 'bank_transfer' && <Building2 className="w-4 h-4" />}
+                      <p className="font-medium" data-testid="text-payment-method">
+                        {order.paymentMethod === 'cash_on_delivery' ? 'Cash on Delivery' :
+                         order.paymentMethod === 'credit_card' ? 'Credit Card' :
+                         'Bank Transfer'
+                        }
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -194,6 +222,44 @@ export default function OrderConfirmation() {
               </CardContent>
             </Card>
 
+            {/* Payment Instructions for non-COD orders */}
+            {(order.paymentMethod === 'credit_card' || order.paymentMethod === 'bank_transfer') && 
+             order.status === 'awaiting_payment' && (
+              <Card className="border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950">
+                <CardHeader>
+                  <CardTitle className="text-yellow-800 dark:text-yellow-200">
+                    Payment Required
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {order.paymentMethod === 'credit_card' ? (
+                    <div className="space-y-3 text-sm">
+                      <p className="text-yellow-700 dark:text-yellow-300 font-medium">
+                        Complete your payment to process your order:
+                      </p>
+                      <div className="space-y-2">
+                        <p>• You'll receive payment instructions via email shortly</p>
+                        <p>• Use order ID: #{order.id.slice(-8).toUpperCase()}</p>
+                        <p>• Your order will be processed once payment is received</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-3 text-sm">
+                      <p className="text-yellow-700 dark:text-yellow-300 font-medium">
+                        Complete your bank transfer to process your order:
+                      </p>
+                      <div className="space-y-2">
+                        <p>• Bank account details will be sent to your email</p>
+                        <p>• Include order ID #{order.id.slice(-8).toUpperCase()} in transfer reference</p>
+                        <p>• Your order will be processed once payment is received</p>
+                        <p>• Processing time: 1-2 business days after payment</p>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
             {/* Next Steps */}
             <Card>
               <CardHeader>
@@ -205,7 +271,12 @@ export default function OrderConfirmation() {
                     <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0" />
                     <div>
                       <p className="font-medium">You'll receive an email confirmation</p>
-                      <p className="text-muted-foreground">Check your inbox for order details and tracking information</p>
+                      <p className="text-muted-foreground">
+                        {order.paymentMethod === 'cash_on_delivery'
+                          ? "Check your inbox for order details and tracking information"
+                          : "Check your inbox for order details and payment instructions"
+                        }
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">

@@ -1,12 +1,11 @@
-import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { useState, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeft, CreditCard, DollarSign, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
@@ -14,19 +13,35 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Link, useLocation } from 'wouter';
 
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
+type PaymentMethod = 'cash_on_delivery' | 'credit_card' | 'bank_transfer';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const paymentMethods = [
+  {
+    value: 'cash_on_delivery' as PaymentMethod,
+    label: 'Cash on Delivery',
+    description: 'Pay when your order arrives',
+    icon: DollarSign,
+  },
+  {
+    value: 'credit_card' as PaymentMethod,
+    label: 'Credit Card',
+    description: 'Pay with your credit or debit card',
+    icon: CreditCard,
+  },
+  {
+    value: 'bank_transfer' as PaymentMethod,
+    label: 'Bank Transfer',
+    description: 'Transfer directly from your bank account',
+    icon: Building2,
+  },
+];
 
 function CheckoutForm() {
-  const stripe = useStripe();
-  const elements = useElements();
   const { items, getTotalPrice, clearCart } = useCart();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash_on_delivery');
   const [customerInfo, setCustomerInfo] = useState({
     email: '',
     firstName: '',
@@ -39,47 +54,68 @@ function CheckoutForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: `${window.location.origin}/order-confirmation`,
+      // Create order
+      const orderData = {
+        customerEmail: customerInfo.email,
+        customerName: `${customerInfo.firstName} ${customerInfo.lastName}`,
+        shippingAddress: {
+          street: customerInfo.street,
+          city: customerInfo.city,
+          zipCode: customerInfo.zipCode,
+          country: customerInfo.country,
         },
-        redirect: 'if_required',
+        items: items.map(item => ({
+          productId: item.product.id,
+          name: item.product.name,
+          price: parseFloat(item.product.price),
+          quantity: item.quantity,
+        })),
+        totalAmount: getTotalPrice(),
+        paymentMethod: paymentMethod,
+      };
+
+      const createResponse = await apiRequest('POST', '/api/create-order', orderData);
+      const createData = await createResponse.json();
+
+      if (!createResponse.ok) {
+        throw new Error(createData.message || 'Failed to create order');
+      }
+
+      // Confirm order
+      const confirmResponse = await apiRequest('POST', '/api/confirm-order', {
+        orderId: createData.orderId,
       });
 
-      if (error) {
-        toast({
-          title: "Payment Failed",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        // Confirm payment on backend
-        await apiRequest('POST', '/api/confirm-payment', {
-          paymentIntentId: paymentIntent.id,
-          orderId: paymentIntent.metadata?.orderId,
-        });
+      const confirmData = await confirmResponse.json();
 
-        clearCart();
-        toast({
-          title: "Payment Successful",
-          description: "Thank you for your purchase!",
-        });
-        
-        setLocation(`/order/${paymentIntent.metadata?.orderId}`);
+      if (!confirmResponse.ok) {
+        throw new Error(confirmData.message || 'Failed to confirm order');
       }
+
+      clearCart();
+      
+      let successMessage = "Thank you for your purchase!";
+      if (paymentMethod === 'cash_on_delivery') {
+        successMessage = "Order confirmed! You'll pay when it arrives.";
+      } else if (paymentMethod === 'credit_card') {
+        successMessage = "Order received! Please complete payment via your credit card.";
+      } else if (paymentMethod === 'bank_transfer') {
+        successMessage = "Order received! Please complete payment via bank transfer.";
+      }
+
+      toast({
+        title: "Order Successful",
+        description: successMessage,
+      });
+      
+      setLocation(`/order/${createData.orderId}`);
     } catch (error: any) {
       toast({
-        title: "Payment Error",
-        description: error.message,
+        title: "Order Error",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -199,17 +235,64 @@ function CheckoutForm() {
               </div>
             </div>
 
-            {/* Payment Element */}
+            {/* Payment Method Selection */}
             <div className="space-y-4">
-              <h3 className="font-medium">Payment Information</h3>
-              <div className="border border-border rounded-md p-3">
-                <PaymentElement />
-              </div>
+              <h3 className="font-medium">Payment Method</h3>
+              <RadioGroup 
+                value={paymentMethod} 
+                onValueChange={(value: PaymentMethod) => setPaymentMethod(value)}
+                data-testid="payment-method-selection"
+              >
+                {paymentMethods.map((method) => (
+                  <div key={method.value} className="flex items-center space-x-3">
+                    <RadioGroupItem 
+                      value={method.value} 
+                      id={method.value}
+                      data-testid={`payment-method-${method.value}`}
+                    />
+                    <Label 
+                      htmlFor={method.value} 
+                      className="flex items-center space-x-3 cursor-pointer flex-1 p-3 rounded-lg border hover:bg-muted/50"
+                    >
+                      <method.icon className="w-5 h-5" />
+                      <div>
+                        <div className="font-medium">{method.label}</div>
+                        <div className="text-sm text-muted-foreground">{method.description}</div>
+                      </div>
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
             </div>
+
+            {/* Payment Method Info */}
+            {paymentMethod === 'credit_card' && (
+              <div className="p-4 bg-muted rounded-lg" data-testid="credit-card-info">
+                <p className="text-sm text-muted-foreground">
+                  After placing your order, you'll receive payment instructions via email to complete your purchase.
+                </p>
+              </div>
+            )}
+
+            {paymentMethod === 'bank_transfer' && (
+              <div className="p-4 bg-muted rounded-lg" data-testid="bank-transfer-info">
+                <p className="text-sm text-muted-foreground">
+                  After placing your order, you'll receive bank account details via email to transfer the payment.
+                </p>
+              </div>
+            )}
+
+            {paymentMethod === 'cash_on_delivery' && (
+              <div className="p-4 bg-muted rounded-lg" data-testid="cash-on-delivery-info">
+                <p className="text-sm text-muted-foreground">
+                  Pay in cash when your order is delivered to your address. No advance payment required.
+                </p>
+              </div>
+            )}
 
             <Button
               type="submit"
-              disabled={!stripe || !elements || !isFormValid || isLoading}
+              disabled={!isFormValid || isLoading}
               className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
               data-testid="button-complete-order"
             >
@@ -223,49 +306,7 @@ function CheckoutForm() {
 }
 
 export default function Checkout() {
-  const { items, getTotalPrice } = useCart();
-  const [clientSecret, setClientSecret] = useState('');
-  const [orderId, setOrderId] = useState('');
-
-  useEffect(() => {
-    if (items.length === 0) return;
-
-    const createPaymentIntent = async () => {
-      try {
-        const orderData = {
-          customerEmail: '',
-          customerName: '',
-          shippingAddress: {
-            street: '',
-            city: '',
-            zipCode: '',
-            country: 'US',
-          },
-          items: items.map(item => ({
-            productId: item.product.id,
-            name: item.product.name,
-            price: parseFloat(item.product.price),
-            quantity: item.quantity,
-          })),
-          totalAmount: getTotalPrice().toString(),
-          status: 'pending',
-        };
-
-        const response = await apiRequest('POST', '/api/create-payment-intent', {
-          amount: getTotalPrice(),
-          orderData,
-        });
-
-        const data = await response.json();
-        setClientSecret(data.clientSecret);
-        setOrderId(data.orderId);
-      } catch (error) {
-        console.error('Error creating payment intent:', error);
-      }
-    };
-
-    createPaymentIntent();
-  }, [items, getTotalPrice]);
+  const { items } = useCart();
 
   if (items.length === 0) {
     return (
@@ -276,19 +317,6 @@ export default function Checkout() {
           <Link href="/">
             <Button>Continue Shopping</Button>
           </Link>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (!clientSecret) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="container mx-auto px-4 py-16 text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto" />
-          <p className="mt-4">Setting up checkout...</p>
         </div>
         <Footer />
       </div>
@@ -307,9 +335,7 @@ export default function Checkout() {
 
         <h1 className="text-3xl font-bold mb-8" data-testid="text-checkout-title">Secure Checkout</h1>
 
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm />
-        </Elements>
+        <CheckoutForm />
       </div>
 
       <Footer />
