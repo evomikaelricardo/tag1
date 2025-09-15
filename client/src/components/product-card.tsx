@@ -47,7 +47,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               className="bg-primary text-primary-foreground hover:bg-primary/90"
               data-testid={`button-customize-${product.id}`}
             >
-              Customize & Add
+              Buy
             </Button>
           </div>
         </CardContent>
