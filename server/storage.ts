@@ -69,7 +69,7 @@ export class MemStorage implements IStorage {
         description: "Discreet tags for seniors with medical history, medications, emergency contacts, and care instructions. Designed for dignity and peace of mind.",
         price: "29.99",
         category: "elderly",
-        imageUrl: "/attached_assets/senior-safety-tags_1757933699653.png",
+        imageUrl: "/attached_assets/senior-safety-tags v2_1757934659937.png",
         features: ["Discreet, elegant design", "Complete medical history", "Medication information", "Emergency contacts", "Care instructions"],
         isPopular: 0,
       },
