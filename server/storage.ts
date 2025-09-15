@@ -49,7 +49,7 @@ export class MemStorage implements IStorage {
         description: "Durable, waterproof tags for pets with owner contact, vet info, medical needs, and GPS location sharing. Perfect for dogs, cats, and other beloved pets.",
         price: "19.99",
         category: "pets",
-        imageUrl: "https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+        imageUrl: "/attached_assets/pet-safety-tags_1757932812919.png",
         features: ["Ultra-durable construction", "Waterproof and weatherproof", "Vet contact information", "Medical needs storage", "GPS location sharing"],
         isPopular: 0,
       },
