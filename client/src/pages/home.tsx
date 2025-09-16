@@ -216,35 +216,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center" data-testid="feature-instant-access">
-              <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Zap className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Instant Access</h3>
-              <p className="text-muted-foreground">One tap reveals critical information instantly - no apps required</p>
-            </div>
-            <div className="text-center" data-testid="feature-secure">
-              <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Shield className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Secure & Private</h3>
-              <p className="text-muted-foreground">Your data is encrypted and only accessible when needed most</p>
-            </div>
-            <div className="text-center" data-testid="feature-compatible">
-              <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Smartphone className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Universal Compatibility</h3>
-              <p className="text-muted-foreground">Works with any NFC-enabled smartphone - iOS and Android</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* How It Works Section */}
       <section id="how-it-works" className="py-16 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -298,6 +269,35 @@ export default function Home() {
               Watch how easy it is to access emergency information with just a tap
             </p>
           </Card>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center" data-testid="feature-instant-access">
+              <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Zap className="h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Instant Access</h3>
+              <p className="text-muted-foreground">One tap reveals critical information instantly - no apps required</p>
+            </div>
+            <div className="text-center" data-testid="feature-secure">
+              <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Shield className="h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Secure & Private</h3>
+              <p className="text-muted-foreground">Your data is encrypted and only accessible when needed most</p>
+            </div>
+            <div className="text-center" data-testid="feature-compatible">
+              <div className="w-16 h-16 bg-accent text-accent-foreground rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Smartphone className="h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Universal Compatibility</h3>
+              <p className="text-muted-foreground">Works with any NFC-enabled smartphone - iOS and Android</p>
+            </div>
+          </div>
         </div>
       </section>
 
