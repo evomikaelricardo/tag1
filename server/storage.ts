@@ -50,7 +50,7 @@ export class MemStorage implements IStorage {
         description: "Colorful, fun designs for children with emergency contact info. When scanned, automatically opens WhatsApp to call parents. Includes fun stickers and child-friendly designs that kids will want to wear.",
         price: "24.99",
         category: "kids",
-        imageUrl: "/attached_assets/kids-safety-tags-v2_1757931875055.png",
+        imageUrl: "/attached_assets/Gemini_Generated_Image_bp9w44bp9w44bp9w (1)_1757985026875.png",
         features: ["Waterproof IP67 rating", "Fun colorful designs", "Instant WhatsApp call to parents", "Emergency contact storage", "Medical condition alerts"],
         isPopular: 0,
       },
