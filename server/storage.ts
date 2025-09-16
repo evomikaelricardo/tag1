@@ -60,7 +60,7 @@ export class MemStorage implements IStorage {
         description: "Colorful, fun designs for children with emergency contact info. When scanned, displays comprehensive emergency contact information and medical details. Includes fun stickers and child-friendly designs that kids will want to wear.",
         price: "24.99",
         category: "kids",
-        imageUrl: "/attached_assets/kids-safety-tags-v2_1757931875055.png",
+        imageUrl: "/attached_assets/Gemini_Generated_Image_3l2rrs3l2rrs3l2r_1757985071863.png",
         features: ["Waterproof IP67 rating", "Fun colorful designs", "Complete emergency contact display", "Medical information access", "Parent contact details"],
         isPopular: 0,
       },
