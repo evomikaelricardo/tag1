@@ -205,7 +205,7 @@ export default function Home() {
                           setSelectedCategory(category.id);
                         }}
                       >
-                        View Options
+                        Select
                       </Button>
                     </div>
                   </CardContent>
