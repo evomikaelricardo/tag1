@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight, Zap, Shield, Smartphone, Phone, Mail, Clock, ChevronDown } from 'lucide-react';
+import { ArrowRight, Zap, Shield, Smartphone, Phone, Mail, Clock, ChevronDown, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -25,10 +25,46 @@ export default function Home() {
     subject: 'General Question',
     message: '',
   });
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ['/api/products'],
   });
+
+  const categories = [
+    {
+      id: 'kids',
+      name: 'Kids Safety Tags',
+      description: 'Colorful, fun designs for children with emergency contact info and medical details.',
+      imageUrl: '/attached_assets/kids-safety-tags-v2_1757931875055.png',
+      price: '24.99'
+    },
+    {
+      id: 'pets',
+      name: 'Pet Tags',
+      description: 'Durable, waterproof tags for pets with owner contact and vet information.',
+      imageUrl: '/attached_assets/pet-safety-tags_1757932812919.png',
+      price: '19.99'
+    },
+    {
+      id: 'luggage',
+      name: 'Luggage Tags',
+      description: 'Smart travel tags with contact info and return instructions for lost luggage.',
+      imageUrl: '/attached_assets/luggage-safety-tags_1757931776551.png',
+      price: '14.99'
+    },
+    {
+      id: 'elderly',
+      name: 'Senior Tags',
+      description: 'Discreet tags for seniors with medical history and emergency contacts.',
+      imageUrl: '/attached_assets/senior-safety-tags v2_1757934659937.png',
+      price: '29.99'
+    }
+  ];
+
+  const filteredProducts = selectedCategory 
+    ? products?.filter(product => product.category === selectedCategory)
+    : [];
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,12 +125,29 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4" data-testid="text-products-title">
-              Choose Your Protection
+              {selectedCategory ? `${categories.find(cat => cat.id === selectedCategory)?.name} Options` : 'Choose Your Protection'}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto" data-testid="text-products-description">
-              Our emergency NFC tags are designed for every member of your family and every important item you care about.
+              {selectedCategory 
+                ? 'Select the contact method that works best for your needs.'
+                : 'Our emergency NFC tags are designed for every member of your family and every important item you care about.'
+              }
             </p>
           </div>
+
+          {selectedCategory && (
+            <div className="mb-6">
+              <Button 
+                variant="outline" 
+                onClick={() => setSelectedCategory(null)}
+                className="inline-flex items-center"
+                data-testid="button-back-to-categories"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Categories
+              </Button>
+            </div>
+          )}
 
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -112,10 +165,51 @@ export default function Home() {
                 </Card>
               ))}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="products-grid">
-              {products?.map((product) => (
+          ) : selectedCategory ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="products-grid">
+              {filteredProducts?.map((product) => (
                 <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="categories-grid">
+              {categories.map((category) => (
+                <Card 
+                  key={category.id} 
+                  className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => setSelectedCategory(category.id)}
+                  data-testid={`card-category-${category.id}`}
+                >
+                  <img
+                    src={category.imageUrl}
+                    alt={category.name}
+                    className="w-full h-48 object-cover"
+                    data-testid={`img-category-${category.id}`}
+                  />
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold mb-2" data-testid={`text-category-name-${category.id}`}>
+                      {category.name}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mb-4" data-testid={`text-category-description-${category.id}`}>
+                      {category.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xl font-bold text-primary" data-testid={`text-category-price-${category.id}`}>
+                        From ${category.price}
+                      </span>
+                      <Button
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
+                        data-testid={`button-view-options-${category.id}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedCategory(category.id);
+                        }}
+                      >
+                        View Options
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           )}
