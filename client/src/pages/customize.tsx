@@ -25,8 +25,7 @@ export default function CustomizePage() {
 
   const [customization, setCustomization] = useState<CustomizationData>({
     nameOnTag: '',
-    emergencyPhone: '',
-    contactType: 'phone_call'
+    emergencyPhone: ''
   });
 
   const [quantity, setQuantity] = useState(1);
@@ -170,10 +169,6 @@ export default function CustomizePage() {
                   <div className="font-semibold" data-testid="preview-phone">
                     {customization.emergencyPhone || 'Enter phone number...'}
                   </div>
-                  <div className="text-sm text-muted-foreground">Contact method:</div>
-                  <div className="font-semibold capitalize" data-testid="preview-contact-type">
-                    {customization.contactType.replace('_', ' ')}
-                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -212,22 +207,6 @@ export default function CustomizePage() {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="contactType">Contact Type *</Label>
-                  <Select 
-                    value={customization.contactType} 
-                    onValueChange={(value) => handleInputChange('contactType', value as CustomizationData['contactType'])}
-                  >
-                    <SelectTrigger data-testid="select-contact-type">
-                      <SelectValue placeholder="Select contact method" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="phone_call">Phone Call</SelectItem>
-                      <SelectItem value="whatsapp_call">WhatsApp Call</SelectItem>
-                      <SelectItem value="emergency_url">Show Emergency Contact Info</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="quantity">Quantity</Label>

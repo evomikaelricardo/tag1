@@ -106,12 +106,6 @@ export default function CartSidebar() {
                           <span className="text-muted-foreground">Emergency phone:</span>
                           <span className="font-medium">{item.customization.emergencyPhone}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Contact type:</span>
-                          <span className="font-medium capitalize">
-                            {item.customization.contactType.replace('_', ' ')}
-                          </span>
-                        </div>
                       </div>
                       <Button
                         variant="outline"

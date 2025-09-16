@@ -5,7 +5,6 @@ import { createStableHash } from '@/lib/utils';
 export interface CustomizationData {
   nameOnTag: string;
   emergencyPhone: string;
-  contactType: 'phone_call' | 'whatsapp_call' | 'emergency_url';
 }
 
 export interface CartItem {
