@@ -289,7 +289,7 @@ export default function Home() {
 
           <Card className="p-8 text-center">
             <img
-              src="https://images.unsplash.com/photo-1556075798-4825dfaaf498?ixlib=rb-4.0.3&ixid=MnwxMJA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&h=600"
+              src="/attached_assets/Gemini_Generated_Image_vstqwsvstqwsvstq_1757984651826.png"
               alt="NFC tag demonstration"
               className="w-full max-w-2xl mx-auto rounded-lg mb-4"
               data-testid="img-nfc-demo"
