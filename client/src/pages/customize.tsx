@@ -15,6 +15,7 @@ import { type Product } from '@shared/schema';
 import Header from '@/components/header';
 import CartSidebar from '@/components/cart-sidebar';
 import Footer from '@/components/footer';
+import ReactCountryFlag from 'react-country-flag';
 
 export default function CustomizePage() {
   const [, params] = useRoute('/customize/:id');
@@ -103,58 +104,58 @@ export default function CustomizePage() {
 
   // Country codes data
   const countryCodes = [
-    { code: '+62', name: 'Indonesia', flag: '🇮🇩' },
-    { code: '+1', name: 'United States', flag: '🇺🇸' },
-    { code: '+44', name: 'United Kingdom', flag: '🇬🇧' },
-    { code: '+86', name: 'China', flag: '🇨🇳' },
-    { code: '+91', name: 'India', flag: '🇮🇳' },
-    { code: '+81', name: 'Japan', flag: '🇯🇵' },
-    { code: '+49', name: 'Germany', flag: '🇩🇪' },
-    { code: '+33', name: 'France', flag: '🇫🇷' },
-    { code: '+39', name: 'Italy', flag: '🇮🇹' },
-    { code: '+34', name: 'Spain', flag: '🇪🇸' },
-    { code: '+7', name: 'Russia', flag: '🇷🇺' },
-    { code: '+55', name: 'Brazil', flag: '🇧🇷' },
-    { code: '+52', name: 'Mexico', flag: '🇲🇽' },
-    { code: '+61', name: 'Australia', flag: '🇦🇺' },
-    { code: '+82', name: 'South Korea', flag: '🇰🇷' },
-    { code: '+65', name: 'Singapore', flag: '🇸🇬' },
-    { code: '+60', name: 'Malaysia', flag: '🇲🇾' },
-    { code: '+66', name: 'Thailand', flag: '🇹🇭' },
-    { code: '+84', name: 'Vietnam', flag: '🇻🇳' },
-    { code: '+63', name: 'Philippines', flag: '🇵🇭' },
-    { code: '+31', name: 'Netherlands', flag: '🇳🇱' },
-    { code: '+41', name: 'Switzerland', flag: '🇨🇭' },
-    { code: '+46', name: 'Sweden', flag: '🇸🇪' },
-    { code: '+47', name: 'Norway', flag: '🇳🇴' },
-    { code: '+45', name: 'Denmark', flag: '🇩🇰' },
-    { code: '+358', name: 'Finland', flag: '🇫🇮' },
-    { code: '+43', name: 'Austria', flag: '🇦🇹' },
-    { code: '+32', name: 'Belgium', flag: '🇧🇪' },
-    { code: '+351', name: 'Portugal', flag: '🇵🇹' },
-    { code: '+30', name: 'Greece', flag: '🇬🇷' },
-    { code: '+90', name: 'Turkey', flag: '🇹🇷' },
-    { code: '+48', name: 'Poland', flag: '🇵🇱' },
-    { code: '+420', name: 'Czech Republic', flag: '🇨🇿' },
-    { code: '+36', name: 'Hungary', flag: '🇭🇺' },
-    { code: '+40', name: 'Romania', flag: '🇷🇴' },
-    { code: '+27', name: 'South Africa', flag: '🇿🇦' },
-    { code: '+20', name: 'Egypt', flag: '🇪🇬' },
-    { code: '+971', name: 'UAE', flag: '🇦🇪' },
-    { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦' },
-    { code: '+972', name: 'Israel', flag: '🇮🇱' },
-    { code: '+852', name: 'Hong Kong', flag: '🇭🇰' },
-    { code: '+886', name: 'Taiwan', flag: '🇹🇼' },
-    { code: '+64', name: 'New Zealand', flag: '🇳🇿' },
-    { code: '+56', name: 'Chile', flag: '🇨🇱' },
-    { code: '+54', name: 'Argentina', flag: '🇦🇷' },
-    { code: '+57', name: 'Colombia', flag: '🇨🇴' },
-    { code: '+51', name: 'Peru', flag: '🇵🇪' },
-    { code: '+598', name: 'Uruguay', flag: '🇺🇾' },
-    { code: '+595', name: 'Paraguay', flag: '🇵🇾' },
-    { code: '+593', name: 'Ecuador', flag: '🇪🇨' },
-    { code: '+591', name: 'Bolivia', flag: '🇧🇴' },
-    { code: '+58', name: 'Venezuela', flag: '🇻🇪' }
+    { code: '+62', name: 'Indonesia', countryCode: 'ID' },
+    { code: '+1', name: 'United States', countryCode: 'US' },
+    { code: '+44', name: 'United Kingdom', countryCode: 'GB' },
+    { code: '+86', name: 'China', countryCode: 'CN' },
+    { code: '+91', name: 'India', countryCode: 'IN' },
+    { code: '+81', name: 'Japan', countryCode: 'JP' },
+    { code: '+49', name: 'Germany', countryCode: 'DE' },
+    { code: '+33', name: 'France', countryCode: 'FR' },
+    { code: '+39', name: 'Italy', countryCode: 'IT' },
+    { code: '+34', name: 'Spain', countryCode: 'ES' },
+    { code: '+7', name: 'Russia', countryCode: 'RU' },
+    { code: '+55', name: 'Brazil', countryCode: 'BR' },
+    { code: '+52', name: 'Mexico', countryCode: 'MX' },
+    { code: '+61', name: 'Australia', countryCode: 'AU' },
+    { code: '+82', name: 'South Korea', countryCode: 'KR' },
+    { code: '+65', name: 'Singapore', countryCode: 'SG' },
+    { code: '+60', name: 'Malaysia', countryCode: 'MY' },
+    { code: '+66', name: 'Thailand', countryCode: 'TH' },
+    { code: '+84', name: 'Vietnam', countryCode: 'VN' },
+    { code: '+63', name: 'Philippines', countryCode: 'PH' },
+    { code: '+31', name: 'Netherlands', countryCode: 'NL' },
+    { code: '+41', name: 'Switzerland', countryCode: 'CH' },
+    { code: '+46', name: 'Sweden', countryCode: 'SE' },
+    { code: '+47', name: 'Norway', countryCode: 'NO' },
+    { code: '+45', name: 'Denmark', countryCode: 'DK' },
+    { code: '+358', name: 'Finland', countryCode: 'FI' },
+    { code: '+43', name: 'Austria', countryCode: 'AT' },
+    { code: '+32', name: 'Belgium', countryCode: 'BE' },
+    { code: '+351', name: 'Portugal', countryCode: 'PT' },
+    { code: '+30', name: 'Greece', countryCode: 'GR' },
+    { code: '+90', name: 'Turkey', countryCode: 'TR' },
+    { code: '+48', name: 'Poland', countryCode: 'PL' },
+    { code: '+420', name: 'Czech Republic', countryCode: 'CZ' },
+    { code: '+36', name: 'Hungary', countryCode: 'HU' },
+    { code: '+40', name: 'Romania', countryCode: 'RO' },
+    { code: '+27', name: 'South Africa', countryCode: 'ZA' },
+    { code: '+20', name: 'Egypt', countryCode: 'EG' },
+    { code: '+971', name: 'UAE', countryCode: 'AE' },
+    { code: '+966', name: 'Saudi Arabia', countryCode: 'SA' },
+    { code: '+972', name: 'Israel', countryCode: 'IL' },
+    { code: '+852', name: 'Hong Kong', countryCode: 'HK' },
+    { code: '+886', name: 'Taiwan', countryCode: 'TW' },
+    { code: '+64', name: 'New Zealand', countryCode: 'NZ' },
+    { code: '+56', name: 'Chile', countryCode: 'CL' },
+    { code: '+54', name: 'Argentina', countryCode: 'AR' },
+    { code: '+57', name: 'Colombia', countryCode: 'CO' },
+    { code: '+51', name: 'Peru', countryCode: 'PE' },
+    { code: '+598', name: 'Uruguay', countryCode: 'UY' },
+    { code: '+595', name: 'Paraguay', countryCode: 'PY' },
+    { code: '+593', name: 'Ecuador', countryCode: 'EC' },
+    { code: '+591', name: 'Bolivia', countryCode: 'BO' },
+    { code: '+58', name: 'Venezuela', countryCode: 'VE' }
   ];
 
   if (error) {
@@ -270,13 +271,36 @@ export default function CustomizePage() {
                   <div className="flex gap-2">
                     <Select value={selectedCountryCode} onValueChange={handleCountryCodeChange}>
                       <SelectTrigger className="w-[140px]" data-testid="select-country-code">
-                        <SelectValue />
+                        <SelectValue>
+                          {selectedCountryCode && (
+                            <span className="flex items-center gap-2">
+                              <ReactCountryFlag 
+                                countryCode={countryCodes.find(c => c.code === selectedCountryCode)?.countryCode || 'ID'} 
+                                svg 
+                                style={{
+                                  width: '1.2em',
+                                  height: '1.2em',
+                                  borderRadius: '2px'
+                                }}
+                              />
+                              <span>{selectedCountryCode}</span>
+                            </span>
+                          )}
+                        </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
                         {countryCodes.map((country) => (
                           <SelectItem key={country.code} value={country.code}>
                             <span className="flex items-center gap-2">
-                              <span>{country.flag}</span>
+                              <ReactCountryFlag 
+                                countryCode={country.countryCode} 
+                                svg 
+                                style={{
+                                  width: '1.2em',
+                                  height: '1.2em',
+                                  borderRadius: '2px'
+                                }}
+                              />
                               <span>{country.code}</span>
                             </span>
                           </SelectItem>
