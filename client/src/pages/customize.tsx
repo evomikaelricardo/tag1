@@ -28,6 +28,9 @@ export default function CustomizePage() {
     emergencyPhone: ''
   });
 
+  const [selectedCountryCode, setSelectedCountryCode] = useState('+62'); // Indonesia default
+  const [phoneNumber, setPhoneNumber] = useState('');
+
   const [quantity, setQuantity] = useState(1);
   
   // Read quantity from URL params and update state
@@ -85,6 +88,74 @@ export default function CustomizePage() {
       [field]: value
     }));
   };
+
+  const handlePhoneChange = (phoneValue: string) => {
+    setPhoneNumber(phoneValue);
+    const fullPhone = selectedCountryCode + phoneValue;
+    handleInputChange('emergencyPhone', fullPhone);
+  };
+
+  const handleCountryCodeChange = (countryCode: string) => {
+    setSelectedCountryCode(countryCode);
+    const fullPhone = countryCode + phoneNumber;
+    handleInputChange('emergencyPhone', fullPhone);
+  };
+
+  // Country codes data
+  const countryCodes = [
+    { code: '+62', name: 'Indonesia', flag: '🇮🇩' },
+    { code: '+1', name: 'United States', flag: '🇺🇸' },
+    { code: '+44', name: 'United Kingdom', flag: '🇬🇧' },
+    { code: '+86', name: 'China', flag: '🇨🇳' },
+    { code: '+91', name: 'India', flag: '🇮🇳' },
+    { code: '+81', name: 'Japan', flag: '🇯🇵' },
+    { code: '+49', name: 'Germany', flag: '🇩🇪' },
+    { code: '+33', name: 'France', flag: '🇫🇷' },
+    { code: '+39', name: 'Italy', flag: '🇮🇹' },
+    { code: '+34', name: 'Spain', flag: '🇪🇸' },
+    { code: '+7', name: 'Russia', flag: '🇷🇺' },
+    { code: '+55', name: 'Brazil', flag: '🇧🇷' },
+    { code: '+52', name: 'Mexico', flag: '🇲🇽' },
+    { code: '+61', name: 'Australia', flag: '🇦🇺' },
+    { code: '+82', name: 'South Korea', flag: '🇰🇷' },
+    { code: '+65', name: 'Singapore', flag: '🇸🇬' },
+    { code: '+60', name: 'Malaysia', flag: '🇲🇾' },
+    { code: '+66', name: 'Thailand', flag: '🇹🇭' },
+    { code: '+84', name: 'Vietnam', flag: '🇻🇳' },
+    { code: '+63', name: 'Philippines', flag: '🇵🇭' },
+    { code: '+31', name: 'Netherlands', flag: '🇳🇱' },
+    { code: '+41', name: 'Switzerland', flag: '🇨🇭' },
+    { code: '+46', name: 'Sweden', flag: '🇸🇪' },
+    { code: '+47', name: 'Norway', flag: '🇳🇴' },
+    { code: '+45', name: 'Denmark', flag: '🇩🇰' },
+    { code: '+358', name: 'Finland', flag: '🇫🇮' },
+    { code: '+43', name: 'Austria', flag: '🇦🇹' },
+    { code: '+32', name: 'Belgium', flag: '🇧🇪' },
+    { code: '+351', name: 'Portugal', flag: '🇵🇹' },
+    { code: '+30', name: 'Greece', flag: '🇬🇷' },
+    { code: '+90', name: 'Turkey', flag: '🇹🇷' },
+    { code: '+48', name: 'Poland', flag: '🇵🇱' },
+    { code: '+420', name: 'Czech Republic', flag: '🇨🇿' },
+    { code: '+36', name: 'Hungary', flag: '🇭🇺' },
+    { code: '+40', name: 'Romania', flag: '🇷🇴' },
+    { code: '+27', name: 'South Africa', flag: '🇿🇦' },
+    { code: '+20', name: 'Egypt', flag: '🇪🇬' },
+    { code: '+971', name: 'UAE', flag: '🇦🇪' },
+    { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦' },
+    { code: '+972', name: 'Israel', flag: '🇮🇱' },
+    { code: '+852', name: 'Hong Kong', flag: '🇭🇰' },
+    { code: '+886', name: 'Taiwan', flag: '🇹🇼' },
+    { code: '+64', name: 'New Zealand', flag: '🇳🇿' },
+    { code: '+56', name: 'Chile', flag: '🇨🇱' },
+    { code: '+54', name: 'Argentina', flag: '🇦🇷' },
+    { code: '+57', name: 'Colombia', flag: '🇨🇴' },
+    { code: '+51', name: 'Peru', flag: '🇵🇪' },
+    { code: '+598', name: 'Uruguay', flag: '🇺🇾' },
+    { code: '+595', name: 'Paraguay', flag: '🇵🇾' },
+    { code: '+593', name: 'Ecuador', flag: '🇪🇨' },
+    { code: '+591', name: 'Bolivia', flag: '🇧🇴' },
+    { code: '+58', name: 'Venezuela', flag: '🇻🇪' }
+  ];
 
   if (error) {
     return (
@@ -196,15 +267,36 @@ export default function CustomizePage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="emergencyPhone">Emergency Phone Number *</Label>
-                  <Input
-                    id="emergencyPhone"
-                    type="tel"
-                    placeholder="e.g., +1234567890"
-                    value={customization.emergencyPhone}
-                    onChange={(e) => handleInputChange('emergencyPhone', e.target.value)}
-                    data-testid="input-emergency-phone"
-                    required
-                  />
+                  <div className="flex gap-2">
+                    <Select value={selectedCountryCode} onValueChange={handleCountryCodeChange}>
+                      <SelectTrigger className="w-[140px]" data-testid="select-country-code">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {countryCodes.map((country) => (
+                          <SelectItem key={country.code} value={country.code}>
+                            <span className="flex items-center gap-2">
+                              <span>{country.flag}</span>
+                              <span>{country.code}</span>
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      id="emergencyPhone"
+                      type="tel"
+                      placeholder="e.g., 1234567890"
+                      value={phoneNumber}
+                      onChange={(e) => handlePhoneChange(e.target.value)}
+                      data-testid="input-emergency-phone"
+                      className="flex-1"
+                      required
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Full number: {selectedCountryCode}{phoneNumber || 'xxxxxxxxxx'}
+                  </p>
                 </div>
 
 
