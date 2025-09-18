@@ -93,7 +93,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-border mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm">&copy; 2024 SafeTag. All rights reserved.</p>
+          <p className="text-sm">&copy; {new Date().getFullYear()} SafeTag. All rights reserved.</p>
           <div className="flex space-x-4 mt-4 sm:mt-0">
             <a href="https://api.whatsapp.com/send/?phone=6281284068690&text&type=phone_number&app_absent=0" 
                target="_blank" 
