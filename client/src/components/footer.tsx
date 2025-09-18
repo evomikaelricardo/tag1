@@ -11,7 +11,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Shield className="text-primary-foreground w-5 h-5" />
               </div>
-              <span className="text-xl font-bold text-foreground">SafeTag Pro</span>
+              <span className="text-xl font-bold text-foreground">SafeTag</span>
             </Link>
             <p className="text-sm">
               Providing peace of mind through smart emergency technology for families worldwide.
@@ -93,7 +93,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-border mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm">&copy; 2024 SafeTag Pro. All rights reserved.</p>
+          <p className="text-sm">&copy; 2024 SafeTag. All rights reserved.</p>
           <div className="flex space-x-4 mt-4 sm:mt-0">
             <a href="https://api.whatsapp.com/send/?phone=6281284068690&text&type=phone_number&app_absent=0" 
                target="_blank" 

@@ -1,8 +1,8 @@
-# SafeTag Pro
+# SafeTag
 
 ## Overview
 
-SafeTag Pro is a modern e-commerce platform specializing in smart emergency tags for kids, pets, luggage, and seniors. The application features a comprehensive product catalog, shopping cart functionality, and order management system with support for multiple payment methods including cash on delivery, credit cards, and bank transfers.
+SafeTag is a modern e-commerce platform specializing in smart emergency tags for kids, pets, luggage, and seniors. The application features a comprehensive product catalog, shopping cart functionality, and order management system with support for multiple payment methods including cash on delivery, credit cards, and bank transfers.
 
 ## User Preferences
 

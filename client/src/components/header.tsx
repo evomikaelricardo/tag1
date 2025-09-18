@@ -30,7 +30,7 @@ export default function Header() {
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <Shield className="text-primary-foreground w-5 h-5" />
             </div>
-            <span className="text-xl font-bold text-foreground">SafeTag Pro</span>
+            <span className="text-xl font-bold text-foreground">SafeTag</span>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-8">
