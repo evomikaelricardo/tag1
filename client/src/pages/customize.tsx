@@ -191,9 +191,9 @@ export default function CustomizePage() {
       <CartSidebar />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link href={`/product/${productId}`} className="inline-flex items-center text-muted-foreground hover:text-foreground mb-8" data-testid="link-back">
+        <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-8" data-testid="link-back">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Product
+          Back To Categories
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
