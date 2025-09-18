@@ -26,16 +26,8 @@ export default function CartSidebar() {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent side="right" className="w-full sm:w-96 flex flex-col" data-testid="cart-sidebar">
         <SheetHeader>
-          <SheetTitle className="flex items-center justify-between">
+          <SheetTitle>
             Shopping Cart
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(false)}
-              data-testid="button-close-cart"
-            >
-              <X className="h-4 w-4" />
-            </Button>
           </SheetTitle>
         </SheetHeader>
         
