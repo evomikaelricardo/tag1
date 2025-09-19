@@ -36,7 +36,7 @@ export class MemStorage implements IStorage {
       // Kids Safety Tags - 3 variants
       {
         id: "kids-tag-phone",
-        name: "Kids Safety Tags - Phone Call",
+        name: "Kids Safety Tags - Basic",
         description: "Colorful, fun designs for children with emergency contact info. When scanned, automatically initiates a phone call to parents. Includes fun stickers and child-friendly designs that kids will want to wear.",
         price: "24.99",
         category: "kids",
@@ -46,7 +46,7 @@ export class MemStorage implements IStorage {
       },
       {
         id: "kids-tag-whatsapp",
-        name: "Kids Safety Tags - WhatsApp Call",
+        name: "Kids Safety Tags - Standard",
         description: "Colorful, fun designs for children with emergency contact info. When scanned, automatically opens WhatsApp to call parents. Includes fun stickers and child-friendly designs that kids will want to wear.",
         price: "24.99",
         category: "kids",
@@ -56,7 +56,7 @@ export class MemStorage implements IStorage {
       },
       {
         id: "kids-tag-emergency",
-        name: "Kids Safety Tags - Emergency Info",
+        name: "Kids Safety Tags - Pro",
         description: "Colorful, fun designs for children with emergency contact info. When scanned, displays comprehensive emergency contact information and medical details. Includes fun stickers and child-friendly designs that kids will want to wear.",
         price: "24.99",
         category: "kids",
@@ -68,7 +68,7 @@ export class MemStorage implements IStorage {
       // Pet Tags - 3 variants
       {
         id: "pet-tag-phone",
-        name: "Pet Tags - Phone Call",
+        name: "Pet Tags - Basic",
         description: "Durable, waterproof tags for pets with owner contact. When scanned, automatically initiates a phone call to the owner. Perfect for dogs, cats, and other beloved pets.",
         price: "19.99",
         category: "pets",
@@ -78,7 +78,7 @@ export class MemStorage implements IStorage {
       },
       {
         id: "pet-tag-whatsapp",
-        name: "Pet Tags - WhatsApp Call",
+        name: "Pet Tags - Standard",
         description: "Durable, waterproof tags for pets with owner contact. When scanned, automatically opens WhatsApp to call the owner. Perfect for dogs, cats, and other beloved pets.",
         price: "19.99",
         category: "pets",
@@ -88,7 +88,7 @@ export class MemStorage implements IStorage {
       },
       {
         id: "pet-tag-emergency",
-        name: "Pet Tags - Emergency Info",
+        name: "Pet Tags - Pro",
         description: "Durable, waterproof tags for pets with owner contact. When scanned, displays comprehensive pet information including medical needs, vet details, and owner contact information.",
         price: "19.99",
         category: "pets",
@@ -100,7 +100,7 @@ export class MemStorage implements IStorage {
       // Luggage Tags - 3 variants
       {
         id: "luggage-tag-phone",
-        name: "Luggage Tags - Phone Call",
+        name: "Luggage Tags - Basic",
         description: "Smart travel tags with contact info. When scanned, automatically initiates a phone call to the owner for quick luggage return. Never lose your bags again with instant contact.",
         price: "14.99",
         category: "luggage",
@@ -110,7 +110,7 @@ export class MemStorage implements IStorage {
       },
       {
         id: "luggage-tag-whatsapp",
-        name: "Luggage Tags - WhatsApp Call",
+        name: "Luggage Tags - Standard",
         description: "Smart travel tags with contact info. When scanned, automatically opens WhatsApp to contact the owner for quick luggage return. Never lose your bags again with instant messaging.",
         price: "14.99",
         category: "luggage",
@@ -120,7 +120,7 @@ export class MemStorage implements IStorage {
       },
       {
         id: "luggage-tag-emergency",
-        name: "Luggage Tags - Emergency Info",
+        name: "Luggage Tags - Pro",
         description: "Smart travel tags with contact info. When scanned, displays comprehensive contact information, destination details, and return instructions for efficient luggage recovery.",
         price: "14.99",
         category: "luggage",
@@ -132,7 +132,7 @@ export class MemStorage implements IStorage {
       // Senior Tags - 3 variants
       {
         id: "senior-tag-phone",
-        name: "Senior Tags - Phone Call",
+        name: "Senior Tags - Basic",
         description: "Discreet tags for seniors with medical history and emergency contacts. When scanned, automatically initiates a phone call to emergency contacts. Designed for dignity and peace of mind.",
         price: "29.99",
         category: "elderly",
@@ -142,7 +142,7 @@ export class MemStorage implements IStorage {
       },
       {
         id: "senior-tag-whatsapp",
-        name: "Senior Tags - WhatsApp Call",
+        name: "Senior Tags - Standard",
         description: "Discreet tags for seniors with medical history and emergency contacts. When scanned, automatically opens WhatsApp to contact family or caregivers. Designed for dignity and peace of mind.",
         price: "29.99",
         category: "elderly",
@@ -152,7 +152,7 @@ export class MemStorage implements IStorage {
       },
       {
         id: "senior-tag-emergency",
-        name: "Senior Tags - Emergency Info",
+        name: "Senior Tags - Pro",
         description: "Discreet tags for seniors with medical history and emergency contacts. When scanned, displays comprehensive medical information, medication details, and emergency contact information.",
         price: "29.99",
         category: "elderly",
